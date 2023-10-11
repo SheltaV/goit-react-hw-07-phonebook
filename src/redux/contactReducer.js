@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import storage from 'redux-persist/lib/storage';
-import { persistReducer } from 'redux-persist';
+import { fetchContacts } from "./operations";
+// import * as contactActions from './actions'
+// import storage from 'redux-persist/lib/storage';
+// import { persistReducer } from 'redux-persist';
 
 const contactSlice = createSlice({
     name: 'contacts',
-    initialState: {list: []},
+    initialState: {
+    list: [],
+    isLoading: false,
+    error: null
+  },
     reducers: {
         addNewContact: {
         reducer(state, action) {
@@ -14,24 +19,37 @@ const contactSlice = createSlice({
         prepare({ name, number }) {
             return {
                 payload: {
-                    id: nanoid(),
                     name,
                     number
                 }}}
         },
         deleteContact(state, action) {
-           state.list = state.list.filter(contact => 
-        contact.id !== action.payload)
+          state.list = state.list.filter(contact => 
+          contact.id !== action.payload)
         }
+  },
+  extraReducers: {
+    [fetchContacts.pending](state) {
+        state.isLoading = true
+    },
+    [fetchContacts.fulfilled](state, action) {
+        state.list.push(...action.payload)
+        state.error = null
+        state.isLoading = false
+    },
+    [fetchContacts.rejected](state, action) {
+        state.isLoading = false
+        state.error = action.payload
+    }
     }
 })
 
 export const { addNewContact, deleteContact } = contactSlice.actions;
-// export const contactReducer = contactSlice.reducer;
+export const contactReducer = contactSlice.reducer;
 
-const persistConfig = {
-  key: 'contacts',
-  storage,
-}
+// const persistConfig = {
+//   key: 'contacts',
+//   storage,
+// }
 
-export const persistedContactReducer = persistReducer(persistConfig, contactSlice.reducer)
+// export const persistedContactReducer = persistReducer(persistConfig, contactSlice.reducer)
