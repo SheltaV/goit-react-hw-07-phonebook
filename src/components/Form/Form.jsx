@@ -2,11 +2,11 @@ import { Formik, Field } from 'formik';
 import { FormFlex, Box } from './Form.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewContact } from 'redux/contactReducer';
-import { getContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/selectors';
 
 export const ContactForm = () => {
     const dispatch = useDispatch();
-    const contacts = useSelector(getContacts);
+    const contacts = useSelector(selectContacts);
 
     const checkingContact = contact => {
         return contacts.find(elem => elem.name.toLowerCase() === contact.name.toLowerCase())
