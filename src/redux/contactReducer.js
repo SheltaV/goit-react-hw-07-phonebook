@@ -3,7 +3,7 @@ import { fetchContacts, addContact, deleteContact } from "./operations";
 // import storage from 'redux-persist/lib/storage';
 // import { persistReducer } from 'redux-persist';
 
-const pending = state => state.isLoading = true;
+const pending = state => {state.isLoading = true};
 const rejected = (state, action) => {
     state.isLoading = false
     state.error = action.payload
@@ -27,6 +27,8 @@ const contactSlice = createSlice({
     [addContact.pending]: pending,
     [addContact.fulfilled](state, action) {
         state.list.push(action.payload)
+        console.log(action.payload)
+        // state.list.phone = action.payload.number
         state.error = null
         state.isLoading = false
     },
