@@ -1,8 +1,8 @@
 import { Formik, Field } from 'formik';
 import { FormFlex, Box } from './Form.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewContact } from 'redux/contactReducer';
 import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
 export const ContactForm = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,8 @@ export const ContactForm = () => {
         if (checkingContact(contact)) {
             return window.alert('Contact already exists.')
         } else {
-            dispatch(addNewContact(contact))
+            dispatch(addContact(contact))
+            // console.log(contact)
         }
     }
 
@@ -25,8 +26,7 @@ return <Formik
         name: '',
         number: ''
     }}
-    onSubmit={
-        values => {addThisContact(values)}}>
+    onSubmit={addThisContact}>
     <FormFlex>
     <Box>
             Name
